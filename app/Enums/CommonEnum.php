@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Enums;
+
+use BenSampo\Enum\Enum;
+
+final class CommonEnum extends Enum
+{
+    const DATE_TIME_FORMAT = 'Y/m/d H:i:s';
+    const DATE_TIME_FORMAT_WO_SECOND = 'Y/m/d H:i';
+    const DATE_TIME_FORMAT_WO_THIRD = 'm/d H:i';
+    const DATE_TIME_FORMAT_V2 = 'Y-m-d H:i:s';
+    const DATE_FORMAT = 'Y/m/d';
+    const DATE_FORMAT_V2 = 'Y-m-d';
+    const DATE_FORMAT_V3 = 'Ymd';
+    const TIME_FORMAT = 'Hi';
+    const NAME_FEATURE_SUPPLIERS = 'SUPPLIERS_DETAIL';
+    const NAME_FEATURE_PAYMENT_TRANSACTION = 'PAYMENT_TRANSACTION_DETAIL';
+    const NAME_FEATURE_MONTHLY_SALES_LIST = 'MONTHLY_SALES_LIST';
+    const NAME_FEATURE_MONTHLY_SALES_FRACTION_ADJUSTMENT = 'MONTHLY_SALES_FRACTION_ADJUSTMENT';
+    const FORMAT_CODE_FOR_MONTHLY_SALES_SLIP = 'monthly_sales_slips';
+    const FORMAT_CODE_FOR_CORRECTION_SLIP = 'correction_slips';
+    const YEAR_MONTH_DB_FORMAT = '%Y-%m';
+    const YEAR_MONTH_PHP_FORMAT = 'Y-m';
+    const INDIVIDUAL_MANAGEMENT_YET = 1;
+    const INDIVIDUAL_MANAGEMENT_NOT_YET = 0;
+    const DECIMAL_IS_ZERO = 0;
+    const DECIMAL_IS_ONE = 1;
+    const DECIMAL_IS_TWO = 2;
+    const DECIMAL_IS_THREE = 3;
+    const DSP_ORD_NUM_DEFAULT = 99999;
+    const NUMBER_SCREEN_EQUIPMENT_MAINTENANCE_YEARLY_SUMMARY_TABLE = 7310;
+    const NUMBER_SCREEN_EQUIPMENT_MAINTENANCE_DETAIL_TABLE = 7212;
+    const NUMBER_SCREEN_EQUIPMENT_MAINTENANCE_MANAGEMENT_TABLE = 7211;
+    const TEXT_FIXITY_CREATE_MANUFACTURING_MANAGEMENT = '製造';
+    const TRANSACTION_SEQUENCE_NO_DEFAULT = 1;
+    //8130
+    const LOAD_CAPACITY = 1;
+    const DISTANCE = 2;
+    const COEFFICIENT = 3;
+    const NAME_ARRIVAL_DEPARTURE_UNDEFINED = '未設定';
+
+}
