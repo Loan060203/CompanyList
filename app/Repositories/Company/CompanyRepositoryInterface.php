@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 
 interface CompanyRepositoryInterface
 {
-    public function getAll(Request $request);
+    public function getAll();
 
     public function filterByParams($params);
 
-   // public function showPort($params);
+    public function showSort(Request $request);
 
     public function getAllDropdown(Request $request);
 

@@ -52,16 +52,10 @@ class CompanyController extends Controller
             'company' => $companyResource,
         ]);
     }
-    public function all(Request $request): \Illuminate\Http\JsonResponse
+    public function all(): \Illuminate\Http\JsonResponse
     {
-        $sort = $request->query('sort');
-
         $companies = $this->companyRepository->getAll();
         $companyGetAllResource = CompanyGetAllResource::collection($companies);
-
-        if ($sort === 'code') {
-            $companies->orderBy('code');
-        }
 
         $queries = DB::getQueryLog();
 
@@ -93,21 +87,6 @@ class CompanyController extends Controller
 
         return response()->json($companies);
     }
-//    public function showSort(Request $request )
-//    {
-//        $sort = $request->input('sort', 'code');
-//        $sortField = 'code';
-//        $order = 'asc';
-//
-//        if ($sort === '-code') {
-//            $sortField = 'code';
-//            $order = 'desc';
-//        }
-//
-//        $companies = Company::orderBy($sortField, $order)->get();
-//
-//        return response()->json($companies);
-//    }
 
     public function store(CreateCompanyRequest $request): \Illuminate\Http\JsonResponse
     {
@@ -124,5 +103,17 @@ class CompanyController extends Controller
         return response()->json(['queries' => $queries,'data'=>$company]);
     }
 
+    public function showSort(Request $request ): \Illuminate\Http\JsonResponse
+    {
+        $companies = $this->companyRepository->showSort($request);
+        $companyListResource = CompanyListResource::collection($companies);
+
+        $queries = DB::getQueryLog();
+
+        return response()->json([
+            'sql_query' => $queries,
+            'company' => $companyListResource,
+        ]);
+    }
 
 }

@@ -2,11 +2,14 @@
 
 namespace App\Models\Company;
 
+use App\Builders\CompanyBuilder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
-use PhpParser\Builder;
+
+
+
 
 
 class Company extends Model
@@ -45,13 +48,8 @@ class Company extends Model
         return $this->branches()->select('classification')->distinct()->get()->pluck('classification');
     }
 
-    public function scopeUseFlgDropdown($query, $use_flg)
+    public function newEloquentBuilder($query)
     {
-        return $query->where(function ($query) use ($use_flg) {
-            $query->where('use_flg', '=', $use_flg)
-                ->orWhere('use_flg', '=', $use_flg)
-                ->orWhereNull('use_flg');
-
-        });
+        return new CompanyBuilder($query);
     }
 }

@@ -6,7 +6,10 @@ use App\Enums\CompanyTypeEnum;
 use App\Http\Request\CreateCompanyRequest;
 use App\Http\Request\UpdateCompanyRequest;
 use App\Models\Company\Company;
+use App\Repositories\Company\Filter\FilterByClassification;
+use App\Repositories\Company\Filter\FilterByUseflg;
 use App\Support\Trait\HasPagination;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -15,48 +18,48 @@ class CompanyRepository implements CompanyRepositoryInterface
 {
     use HasPagination;
 
-    public function getAll(Request $request): array|\Illuminate\Database\Eloquent\Collection
+    public function getAll(): array|\Illuminate\Database\Eloquent\Collection
     {
         return Company::all();
     }
     public function getAllDropdown(Request $request): array|\Illuminate\Database\Eloquent\Collection
     {
         $use_flg = $request->input('use_flg');
-        return Company::useFlgDropdown($use_flg)->get();
+
+        if(isset($use_flg)){
+            return Company::UseFlgDropdown($use_flg)->get();
+        }
+        return Company::all();
+
     }
-    public function filterByParams($params)
+    public function filterByParams( $params): array|\Illuminate\Database\Eloquent\Collection
     {
         $companies = Company::query();
 
-        if (isset($params['use_flg'])) {
-            $companies->where('use_flg', $params['use_flg']);
-        }
-        if (isset($params['classification'])) {
-            $companies->where('classification', $params['classification']);
-        }
+        $filterByParams=[
+            'use_flg'=> new FilterByUseflg(),
+            'classification'=>new FilterByClassification(),
 
-        if (isset($params['district_id'])) {
-            $companies->where('district_id', $params['district_id']);
-        }
+        ];
 
-        if (isset($params['company_id'])) {
-            $companies->where('company_id', $params['company_id']);
+        foreach ($params as $param => $value) {
+            $callable = $filterByParams[$param] ?? null;
+            if (isset($callable)) {
+                $callable($companies, $value);
+            }
         }
-
         return $companies->get();
     }
 
-//    public function showPort($params)
-//    {
-//        $companies = Company::query();
-//
-//        if (isset($params['id'])) {
-//            $companies->where('id', $params['id']);
-//        }
-//        if (isset($params['tel1'])) {
-//            $companies->where('tel1', $params['tel1']);
-//        }
-//    }
+    public function showSort(Request $request): array|\Illuminate\Database\Eloquent\Collection
+    {
+        $sort = $request->query('sort');
+
+        if (str_starts_with($sort, '-')) {
+            $sortColumn = substr($sort, 1);
+            return Company::query()->orderByDesc($sortColumn)->get();
+        }return Company::query()->orderBy($sort)->get();
+    }
     public function getAllWithBranches(): LengthAwarePaginator
     {
         return Company::with('branches')->paginate($this->getPerPage());
