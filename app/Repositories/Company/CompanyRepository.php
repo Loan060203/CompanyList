@@ -6,10 +6,13 @@ use App\Enums\CompanyTypeEnum;
 use App\Http\Request\CreateCompanyRequest;
 use App\Http\Request\UpdateCompanyRequest;
 use App\Models\Company\Company;
+use App\Models\Company\CompanyBranch;
 use App\Repositories\Company\Filter\FilterByClassification;
 use App\Repositories\Company\Filter\FilterByUseflg;
+use App\Repositories\Company\Sort\CompanySortByCode;
 use App\Support\Trait\HasPagination;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -32,23 +35,52 @@ class CompanyRepository implements CompanyRepositoryInterface
         return Company::all();
 
     }
-    public function filterByParams( $params): array|\Illuminate\Database\Eloquent\Collection
+    public function filterByParams(Request $request):LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection
     {
         $companies = Company::query();
 
-        $filterByParams=[
+        if($params = $request->input('filter'))
+        {
+            $companies = $this->getFilters($companies, $params);
+        }
+
+        if($sort = $request->query('sort'))
+        {
+            $companies = $this->getSort($companies, $sort);
+        }
+
+        return $companies->paginate($this->getPerPage());
+    }
+
+    public function getFilters($companies, $params)
+    {
+
+        $filterByParams = [
             'use_flg'=> new FilterByUseflg(),
             'classification'=>new FilterByClassification(),
-
         ];
 
-        foreach ($params as $param => $value) {
+        foreach ($params as $param => $value)
+        {
             $callable = $filterByParams[$param] ?? null;
             if (isset($callable)) {
                 $callable($companies, $value);
             }
         }
-        return $companies->get();
+        return $companies;
+    }
+
+    public function getSort($companies, $sort)
+    {
+        if (str_starts_with($sort, '-')) {
+                $sortColumn = substr($sort, 1);
+                $companies->orderByDesc($sortColumn);
+            } else {
+                $companies->orderBy($sort);
+            }
+        return $companies;
+
+
     }
 
     public function showSort(Request $request): array|\Illuminate\Database\Eloquent\Collection
@@ -84,4 +116,12 @@ class CompanyRepository implements CompanyRepositoryInterface
         $company->update($data);
         return $company;
     }
+
+    public function delete($id)
+    {
+        $companies= Company::findOrFail($id);
+        $companies->delete();
+        Return $companies;
+    }
+
 }

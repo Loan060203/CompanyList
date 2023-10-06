@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|District whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|District whereUseFlg($value)
  * @mixin \Eloquent
+ * @mixin IdeHelperDistrict
  */
 class District extends Model
 {

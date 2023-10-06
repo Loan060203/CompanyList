@@ -43,3 +43,5 @@ Route::put('/company_branches/update/{id}', [CompanyBranchController::class, 'up
 Route::get('/companies/all/list/dropdown', [CompanyController::class, 'allInDropdown']);
 Route::get('/companies/showlist', [CompanyController::class, 'showList']);
 Route::get('/companies/showsort', [CompanyController::class, 'showSort']);
+
+Route::delete('/companies/delete/{id}', [CompanyController::class, 'destroy']);

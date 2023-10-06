@@ -25,7 +25,7 @@ class CompanyCollection extends PaginationResource
 
     public $collects = CompanyItemResource::class;
 
-    public function toArray($request = null)
+    public function toArray($request = null): array|JsonSerializable|Arrayable
     {
         return parent::toArray($request);
     }

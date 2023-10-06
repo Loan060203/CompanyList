@@ -9,7 +9,7 @@ interface CompanyRepositoryInterface
 {
     public function getAll();
 
-    public function filterByParams($params);
+    public function filterByParams(Request $request);
 
     public function showSort(Request $request);
 
@@ -24,5 +24,7 @@ interface CompanyRepositoryInterface
     public function create(CreateCompanyRequest $request);
 
     public function update(UpdateCompanyRequest $request, int $id);
+
+    public function delete($id);
 
 }

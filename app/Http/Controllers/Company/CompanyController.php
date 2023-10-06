@@ -79,13 +79,18 @@ class CompanyController extends Controller
         ]);
     }
 
-        public function showList(Request $request )
+    public function showList(Request $request ): \Illuminate\Http\JsonResponse
     {
-        $params = $request->input('filter');
+        $companies = $this->companyRepository->filterByParams($request);
 
-        $companies = $this->companyRepository->filterByParams($params);
+        $companyListResource = new CompanyCollection($companies);
 
-        return response()->json($companies);
+        $queries = DB::getQueryLog();
+
+        return response()->json([
+            'sql_query' => $queries,
+            'company' => $companyListResource,
+        ]);
     }
 
     public function store(CreateCompanyRequest $request): \Illuminate\Http\JsonResponse
@@ -115,5 +120,18 @@ class CompanyController extends Controller
             'company' => $companyListResource,
         ]);
     }
+
+    public function destroy($id): \Illuminate\Http\JsonResponse
+    {
+        $this->companyRepository->delete($id);
+
+        $queries = DB::getQueryLog();
+
+        return response()->json([
+            'sql_query' => $queries,
+
+        ]);
+    }
+
 
 }

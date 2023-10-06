@@ -51,6 +51,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyBranch whereUseFlg($value)
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyBranch whereYomigana($value)
  * @mixin \Eloquent
+ * @mixin IdeHelperCompanyBranch
  */
 class CompanyBranch extends Model
 {

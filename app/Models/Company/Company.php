@@ -12,6 +12,9 @@ use Illuminate\Support\Collection;
 
 
 
+/**
+ * @mixin IdeHelperCompany
+ */
 class Company extends Model
 {
     use HasFactory;

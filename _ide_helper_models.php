@@ -36,34 +36,34 @@ namespace App\Models\Company{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Company\CompanyBranch> $branches
  * @property-read int|null $branches_count
+ * @method static \App\Builders\CompanyBuilder|Company UseFlgDropdown($use_flg)
  * @method static \Database\Factories\Company\CompanyFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Company newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Company query()
- * @method static \Illuminate\Database\Eloquent\Builder|Company useFlgDropdown($use_flg)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereClassification($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereContactName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereDspOrdNum($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereFax($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereIdvMgmt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company wherePost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereRemark($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereTel1($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereTel2($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereUrl($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereUseFlg($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Company whereYomigana($value)
+ * @method static \App\Builders\CompanyBuilder|Company newModelQuery()
+ * @method static \App\Builders\CompanyBuilder|Company newQuery()
+ * @method static \App\Builders\CompanyBuilder|Company query()
+ * @method static \App\Builders\CompanyBuilder|Company whereAddress($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereClassification($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereCode($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereContactName($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereCreatedAt($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereCreatedBy($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereDspOrdNum($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereFax($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereId($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereIdvMgmt($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereName($value)
+ * @method static \App\Builders\CompanyBuilder|Company wherePost($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereRemark($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereTel1($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereTel2($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereUpdatedAt($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereUpdatedBy($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereUrl($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereUseFlg($value)
+ * @method static \App\Builders\CompanyBuilder|Company whereYomigana($value)
  * @mixin \Eloquent
  */
-	class Company extends \Eloquent {}
+	class IdeHelperCompany {}
 }
 
 namespace App\Models\Company{
@@ -112,7 +112,7 @@ namespace App\Models\Company{
  * @method static \Illuminate\Database\Eloquent\Builder|CompanyBranch whereYomigana($value)
  * @mixin \Eloquent
  */
-	class CompanyBranch extends \Eloquent {}
+	class IdeHelperCompanyBranch {}
 }
 
 namespace App\Models{
@@ -131,7 +131,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|District whereUseFlg($value)
  * @mixin \Eloquent
  */
-	class District extends \Eloquent {}
+	class IdeHelperDistrict {}
 }
 
 namespace App\Models{
@@ -164,6 +164,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-	class User extends \Eloquent {}
+	class IdeHelperUser {}
 }
 
