@@ -79,8 +79,6 @@ class CompanyRepository implements CompanyRepositoryInterface
                 $companies->orderBy($sort);
             }
         return $companies;
-
-
     }
 
     public function showSort(Request $request): array|\Illuminate\Database\Eloquent\Collection
@@ -92,23 +90,28 @@ class CompanyRepository implements CompanyRepositoryInterface
             return Company::query()->orderByDesc($sortColumn)->get();
         }return Company::query()->orderBy($sort)->get();
     }
+
     public function getAllWithBranches(): LengthAwarePaginator
     {
         return Company::with('branches')->paginate($this->getPerPage());
     }
+
     public function getById($id)
     {
         return Company::findOrFail($id);
     }
+
     public function getByUseFlg($use_flg)
     {
         return Company::findOrFail($use_flg);
     }
+
     public function create(CreateCompanyRequest $request): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
     {
         $data = $request->validated();
         return Company::query()->create($data);
     }
+
     public function update(UpdateCompanyRequest $request, int $id): array|null|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
     {
         $data = $request->validated();
