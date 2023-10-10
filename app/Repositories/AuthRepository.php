@@ -18,7 +18,7 @@ class AuthRepository implements AuthRepositoryInterface
      *
      * @return string
      */
-    public function register(array $data): string
+    public function model(): string
     {
         return User::create();
     }
@@ -35,7 +35,7 @@ class AuthRepository implements AuthRepositoryInterface
 
     public function login(array $credentials)
     {
-        // TODO: Implement login() method.
+
     }
 
     public function logout()

@@ -52,9 +52,8 @@ class CompanyRepository implements CompanyRepositoryInterface
         return $companies->paginate($this->getPerPage());
     }
 
-    public function getFilters($companies, $params)
+    public function getFilters($companies, $params,)
     {
-
         $filterByParams = [
             'use_flg'=> new FilterByUseflg(),
             'classification'=>new FilterByClassification(),

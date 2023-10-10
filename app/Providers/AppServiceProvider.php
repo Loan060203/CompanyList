@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(CompanyBranchRepositoryInterface::class, CompanyBranchRepository::class);
         $this->app->bind(DistrictRepositoryInterface::class, DistrictRepository::class);
+        $this->app->bind(AuthRepositoryInterface::class,AuthRepository::class);
 
     }
 

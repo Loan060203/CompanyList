@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Company\Auth\AuthController;
 use App\Http\Controllers\Company\CompanyBranchController;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\DistrictController;
@@ -25,11 +26,6 @@ Route::get('/companies', [CompanyController::class, 'index'])->name('companies.i
 Route::get('/districts', [DistrictController::class, 'index']);
 Route::get('/company_branches', [CompanyBranchController::class, 'index']);
 
-
-Route::get('/company/{id}', [CompanyController::class, 'show']);
-Route::get('/district/{id}', [DistrictController::class, 'show']);
-Route::get('/company_branch/{id}', [CompanyBranchController::class, 'show']);
-
 Route::get('/companies/all/list', [CompanyController::class, 'all']);
 Route::get('/company_branches/all/list', [CompanyBranchController::class, 'all']);
 Route::get('/districts/all/list', [DistrictController::class, 'all']);
@@ -40,8 +36,26 @@ Route::put('/companies/update/{id}', [CompanyController::class, 'update'])->name
 Route::post('/company_branches/store', [CompanyBranchController::class, 'store'])->name('company_branches.index');
 Route::put('/company_branches/update/{id}', [CompanyBranchController::class, 'update'])->name('company_branches.update');
 
-Route::get('/companies/all/list/dropdown', [CompanyController::class, 'allInDropdown']);
-Route::get('/companies/showlist', [CompanyController::class, 'showList']);
-Route::get('/companies/showsort', [CompanyController::class, 'showSort']);
-
 Route::delete('/companies/delete/{id}', [CompanyController::class, 'destroy']);
+
+Route::middleware('guest')->group(function () {
+    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('login', [AuthController::class, 'login'])->name('login');
+});
+//Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    //Route::get('profile', [AuthController::class, 'me'])->name('profile');
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/companies/all/list/dropdown', [CompanyController::class, 'allInDropdown']);
+    Route::get('/companies/showlist', [CompanyController::class, 'showList']);
+    Route::get('/companies/showsort', [CompanyController::class, 'showSort']);
+
+    Route::get('/company/{id}', [CompanyController::class, 'show']);
+    Route::get('/district/{id}', [DistrictController::class, 'show']);
+    Route::get('/company_branch/{id}', [CompanyBranchController::class, 'show']);
+
+});
+

@@ -10,7 +10,7 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface AuthRepositoryInterface extends RepositoryInterface
 {
-    public function register(array $data);
+    public function model();
 
     public function login(array $credentials);
 
