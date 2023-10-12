@@ -30,14 +30,10 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
+            'role'=>'required|min:2',
         ]);
 
-        $user = new User;
-        $user->name = $data['name'];
-        $user->email = $data['email'];
-        $user->password = Hash::make($data['password']);
-        $user->save();
-
+        $user=$this->authRepository->store($data);
         $token = $user->createToken('remember_token')->plainTextToken;
 
         return response()->json([
@@ -76,5 +72,13 @@ class AuthController extends Controller
     public function httpUnauthorized(): \Illuminate\Http\JsonResponse
     {
         return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    protected function responseUserWithToken($token, $user): array
+    {
+        return [
+            'user' => new $user,
+            'token' => $token,
+        ];
     }
 }

@@ -38,7 +38,9 @@ class Company extends Model
         'dsp_ord_num',
         'remark',
         'idv_mgmt',
-        'use_flg'
+        'use_flg',
+        'created_by',
+        'updated_by'
     ];
 
     public function branches(): HasMany
@@ -55,4 +57,5 @@ class Company extends Model
     {
         return new CompanyBuilder($query);
     }
+
 }

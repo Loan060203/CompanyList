@@ -9,7 +9,7 @@ interface CompanyRepositoryInterface
 {
     public function getAll();
 
-    public function filterByParams(Request $request);
+    public function filters(Request $request);
 
     public function showSort(Request $request);
 

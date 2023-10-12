@@ -10,6 +10,8 @@ use App\Repositories\CompanyBranch\CompanyBranchRepository;
 use App\Repositories\CompanyBranch\CompanyBranchRepositoryInterface;
 use App\Repositories\District\DistrictRepository;
 use App\Repositories\District\DistrictRepositoryInterface;
+use App\Repositories\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

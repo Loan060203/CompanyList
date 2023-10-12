@@ -1,6 +1,8 @@
 <?php
 namespace App\Repositories;
 
+use App\Http\Request\RegisterRequest;
+use Illuminate\Http\Request;
 use Prettus\Repository\Contracts\RepositoryInterface;
 
 /**
@@ -10,8 +12,10 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface AuthRepositoryInterface extends RepositoryInterface
 {
-    public function model();
 
+    public function store( array $data);
+
+    public function model();
     public function login(array $credentials);
 
     public function logout();

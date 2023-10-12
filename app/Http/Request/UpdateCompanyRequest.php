@@ -35,7 +35,7 @@ class UpdateCompanyRequest extends FormRequest
     {
         $companyId = $this->route('companies') ? $this->route('companies')['id'] : null;
         return [
-            'classification' => [Rule::in(CompanyTypeEnum::getValues()), new CompanyClassificationUnique],
+            'classification' => [Rule::in(CompanyTypeEnum::getValues())],
             'code' => ['max:50', 'string', 'required', Rule::unique('companies')->ignore($companyId, 'id')],
             'name' => 'max:100|string',
             'yomigana' => 'string|nullable',

@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Http\Request\RegisterRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Prettus\Repository\Eloquent\BaseRepository;
 
 
@@ -11,13 +13,21 @@ use Prettus\Repository\Eloquent\BaseRepository;
  *
  * @package namespace App\Repositories;
  */
-class AuthRepository implements AuthRepositoryInterface
+class AuthRepository  implements AuthRepositoryInterface
 {
-    /**
-     * Specify Model class name
-     *
-     * @return string
-     */
+
+    public function store( array $data): User
+    {
+        $user = new User;
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->role =$data['role'];
+        $user->save();
+
+        return $user;
+    }
+
     public function model(): string
     {
         return User::create();

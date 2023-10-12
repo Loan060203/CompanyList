@@ -13,6 +13,7 @@ use App\Http\Resources\Company\CompanyListResource;
 use App\Http\Resources\Company\CompanyResource;
 use App\Models\Company\Company;
 use App\Repositories\Company\CompanyRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,6 +28,7 @@ class CompanyController extends Controller
     public function __construct(CompanyRepositoryInterface $companyRepository)
     {
         $this->companyRepository = $companyRepository;
+
     }
     public function index(): \Illuminate\Http\JsonResponse
     {
@@ -81,7 +83,7 @@ class CompanyController extends Controller
 
     public function showList(Request $request ): \Illuminate\Http\JsonResponse
     {
-        $companies = $this->companyRepository->filterByParams($request);
+        $companies = $this->companyRepository->filters($request);
 
         $companyListResource = new CompanyCollection($companies);
 
@@ -93,19 +95,37 @@ class CompanyController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(CreateCompanyRequest $request): \Illuminate\Http\JsonResponse
     {
+        if($this->authorize('create', Company::class)){
         $companies = $this->companyRepository->create($request);
 
         $queries = DB::getQueryLog();
-        return response()->json(['queries' => $queries,'data'=>$companies]);
+        return response()->json([
+            'queries' => $queries,
+            'data'=>$companies]);}
+        else{
+            return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
+        }
     }
+
+    /**
+     * @throws AuthorizationException
+     */
     public function update(UpdateCompanyRequest $request, int $id): \Illuminate\Http\JsonResponse
     {
+        if($this->authorize('update', Company::class)){
         $company = $this->companyRepository->update($request, $id);
 
         $queries = DB::getQueryLog();
-        return response()->json(['queries' => $queries,'data'=>$company]);
+        return response()->json(['queries' => $queries,'data'=>$company]);}
+        else{
+            return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
+
+        }
     }
 
     public function showSort(Request $request ): \Illuminate\Http\JsonResponse
@@ -121,16 +141,22 @@ class CompanyController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy($id): \Illuminate\Http\JsonResponse
     {
-        $this->companyRepository->delete($id);
+        if($this->authorize('delete', Company::class)){
+            $this->companyRepository->delete($id);
 
-        $queries = DB::getQueryLog();
+            $queries = DB::getQueryLog();
+            return response()->json(['queries' => $queries]);}
+        else{
+            return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
 
-        return response()->json([
-            'sql_query' => $queries,
+        }
 
-        ]);
+
     }
 
 
