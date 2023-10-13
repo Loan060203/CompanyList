@@ -41,20 +41,21 @@ Route::put('/company_branches/update/{id}', [CompanyBranchController::class, 'up
 Route::delete('/users/delete/{id}', [UserController::class, 'destroy']);
 
 Route::middleware('guest')->group(function () {
-    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
 });
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/companies/all/list/dropdown', [CompanyController::class, 'allInDropdown']);
-    Route::get('/companies/showlist', [CompanyController::class, 'showList']);
-    Route::get('/companies/showsort', [CompanyController::class, 'showSort']);
+    Route::get('/companies/show_list', [CompanyController::class, 'showList']);
+    Route::get('/companies/show_sort', [CompanyController::class, 'showSort']);
 
     Route::post('/companies/store', [CompanyController::class, 'store']);
-    Route::put('/companies/update/{id}', [CompanyController::class, 'update'])->name('companies.index');
+    Route::put('/companies/update/{id}', [CompanyController::class, 'update'])->name('companies.update');
     Route::delete('/companies/delete/{id}', [CompanyController::class, 'destroy']);
 
 });

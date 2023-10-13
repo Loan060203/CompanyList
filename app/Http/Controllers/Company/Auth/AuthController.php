@@ -24,14 +24,9 @@ class AuthController extends Controller
         $this-> authRepository = $authRepository;
     }
 
-    public function Register(Request $request): \Illuminate\Http\JsonResponse
+    public function register(RegisterRequest $request): \Illuminate\Http\JsonResponse
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-            'role'=>'required|min:2',
-        ]);
+        $data = $request->validated();
 
         $user=$this->authRepository->store($data);
         $token = $user->createToken('remember_token')->plainTextToken;
@@ -41,12 +36,9 @@ class AuthController extends Controller
             'token'=>$token,
         ]);
     }
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
     {
-        $credentials = $request->validate([
-            'name' => 'required',
-            'password' => 'required',
-        ]);
+        $credentials = $request->validated();
 
         if (!Auth::attempt($credentials)) {
             return $this->httpUnauthorized(trans('errors.unauthenticated'));

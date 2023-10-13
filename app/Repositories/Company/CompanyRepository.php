@@ -22,17 +22,19 @@ class CompanyRepository implements CompanyRepositoryInterface
 {
     use HasPagination;
 
-//    public function __construct(private array $filterByParams)
-//    {
-//        $this->filterByParams = [
-//            'use_flg' => new FilterByUseflg(),
-//            'classification' => new FilterByClassification(),
-//        ];
-//
-//        $this->sortByCode=[
-//            'code'=> new CompanySortByCode(),
-//        ];
-//    }
+    protected array $filterByParams = [];
+    protected array $sortByCode = [];
+    public function __construct()
+    {
+        $this->filterByParams = [
+            'use_flg' => new FilterByUseflg,
+            'classification' => new FilterByClassification,
+        ];
+
+        $this->sortByCode=[
+            'code'=> new CompanySortByCode,
+        ];
+    }
 
     public function getAll(): array|\Illuminate\Database\Eloquent\Collection
     {
@@ -54,70 +56,70 @@ class CompanyRepository implements CompanyRepositoryInterface
 
         if($params = $request->input('filter'))
         {
-            $companies = $this->getFilters($companies, $params);
+            $companies = $this->getFilters($companies, $this->filterByParams);
         }
 
         if($sort = $request->query('sort'))
         {
-            $companies = $this->getSort($companies, $sort);
+            $companies = $this->getSort($companies, $this->sortByCode);
         }
 
         return $companies->paginate($this->getPerPage());
     }
 
-//    public function getFilters(Builder $query,array $filterByParams): Builder
-//    {
-//        $params = request()->input('filter');
-//        foreach ($params as $param => $value) {
-//            $callable = $filterByParams[$param] ?? null;
-//            if (isset($callable)) {
-//                $callable($query, $filterByParams);
-//            }
-//        }
-//        return $query;
-//    }
-//
-//    public function getSort(Builder $query,array $sortByCode): Builder
-//    {
-//        if ($sort = request()->query('sort')) {
-//            $descending = str_starts_with($sort, '-');
-//            $sortColumn = $descending ? substr($sort, 1) : $sort;
-//            $callable = $sortByCode[$sortColumn] ?? null;
-//            if (isset($callable)) {
-//                $callable($query, $descending, $sortColumn);
-//            }
-//        }
-//        return $query;
-//    }
-
-    public function getFilters($companies, $params)
+    public function getFilters(Builder $query, array $filterByParams): Builder
     {
-
-        $filterByParams = [
-            'use_flg'=> new FilterByUseflg(),
-            'classification'=>new FilterByClassification(),
-        ];
-
-        foreach ($params as $param => $value)
-        {
+        $params = request()->input('filter');
+        foreach ($params as $param => $value) {
             $callable = $filterByParams[$param] ?? null;
             if (isset($callable)) {
-                $callable($companies, $value);
+                $callable($query, $value);
             }
         }
-        return $companies;
+        return $query;
     }
 
-    public function getSort($companies, $sort)
+    public function getSort(Builder $query,array $sortByCode): Builder
     {
-        if (str_starts_with($sort, '-')) {
-            $sortColumn = substr($sort, 1);
-            $companies->orderByDesc($sortColumn);
-        } else {
-            $companies->orderBy($sort);
+        if ($sort = request()->query('sort')) {
+            $descending = str_starts_with($sort, '-');
+            $sortColumn = $descending ? substr($sort, 1) : $sort;
+            $callable = $sortByCode[$sortColumn] ?? null;
+            if (isset($callable)) {
+                $callable($query, $descending);
+            }
         }
-        return $companies;
+        return $query;
     }
+
+//    public function getFilters($companies, $params)
+//    {
+//
+//        $filterByParams = [
+//            'use_flg'=> new FilterByUseflg(),
+//            'classification'=>new FilterByClassification(),
+//        ];
+//
+//        foreach ($params as $param => $value)
+//        {
+//            $callable = $filterByParams[$param] ?? null;
+//            if (isset($callable)) {
+//                $callable($companies, $value);
+//            }
+//        }
+//        return $companies;
+//    }
+
+//    public function getSort($companies, $sort)
+//    {
+//        if (str_starts_with($sort, '-')) {
+//            $sortColumn = substr($sort, 1);
+//            $companies->orderByDesc($sortColumn);
+//        } else {
+//            $companies->orderBy($sort);
+//        }
+//        return $companies;
+//    }
 
     public function showSort(Request $request): array|\Illuminate\Database\Eloquent\Collection
     {

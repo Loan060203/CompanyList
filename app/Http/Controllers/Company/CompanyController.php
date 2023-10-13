@@ -108,7 +108,7 @@ class CompanyController extends Controller
             'queries' => $queries,
             'data'=>$companies]);}
         else{
-            return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
+            return response()->json(['error']);
         }
     }
 
@@ -123,7 +123,7 @@ class CompanyController extends Controller
         $queries = DB::getQueryLog();
         return response()->json(['queries' => $queries,'data'=>$company]);}
         else{
-            return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
+            return response()->json(['error']);
 
         }
     }
