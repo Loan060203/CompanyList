@@ -40,30 +40,33 @@ class CompanyController extends Controller
         return response()->json([
             'sql_query' => $queries,
             'company' => $companyCollection,
+
         ]);
     }
     public function show($id): \Illuminate\Http\JsonResponse
     {
         $company = $this->companyRepository->getById($id);
-        $companyResource = new CompanyResource($company);
+        //$companyResource = new CompanyResource($company);
 
         $queries = DB::getQueryLog();
 
         return response()->json([
             'sql_query' => $queries,
-            'company' => $companyResource,
+            //'company' => $companyResource,
+            'company'=>$company,
         ]);
     }
     public function all(): \Illuminate\Http\JsonResponse
     {
         $companies = $this->companyRepository->getAll();
-        $companyGetAllResource = CompanyGetAllResource::collection($companies);
+        //$companyGetAllResource = CompanyGetAllResource::collection($companies);
 
         $queries = DB::getQueryLog();
 
         return response()->json([
             'sql_query' => $queries,
-            'company' => $companyGetAllResource,
+            //'company' => $companyGetAllResource,
+            'company'=>$companies,
         ]);
     }
 

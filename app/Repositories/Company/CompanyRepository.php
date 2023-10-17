@@ -15,7 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-
+use Illuminate\Support\Facades\DB;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 
 class CompanyRepository implements CompanyRepositoryInterface
@@ -36,16 +38,21 @@ class CompanyRepository implements CompanyRepositoryInterface
         ];
     }
 
-    public function getAll(): array|\Illuminate\Database\Eloquent\Collection
+    public function getAll(): \Illuminate\Support\Collection
     {
-        return Company::all();
+        return DB::table('companies')->get();
+
     }
-    public function getAllDropdown(Request $request): array|\Illuminate\Database\Eloquent\Collection
+    public function getAllDropdown(Request $request): \Illuminate\Support\Collection
     {
         $use_flg = $request->input('use_flg');
 
         if(isset($use_flg)){
-            return Company::UseFlgDropdown($use_flg)->get();
+
+            return DB::table('companies')
+                ->where('use_flg', $use_flg)
+                ->get();
+
         }
         return Company::all();
 
@@ -78,6 +85,17 @@ class CompanyRepository implements CompanyRepositoryInterface
         }
         return $query;
     }
+
+//    public function filterByValue(Request $request)
+//    {
+//        $value = $request->input('value');
+//
+//        $companies = DB::table('companies')
+//            ->where('column_name', $value)
+//            ->get();
+//
+//        return $companies;
+//    }
 
     public function getSort(Builder $query,array $sortByCode): Builder
     {
@@ -138,7 +156,10 @@ class CompanyRepository implements CompanyRepositoryInterface
 
     public function getById($id)
     {
-        return Company::findOrFail($id);
+        //return Company::findOrFail($id);
+        return DB::table('companies')
+            ->where('id', $id)
+            ->first();
     }
 
     public function getByUseFlg($use_flg)
@@ -162,9 +183,9 @@ class CompanyRepository implements CompanyRepositoryInterface
 
     public function delete($id)
     {
-        $companies= Company::findOrFail($id);
-        $companies->delete();
-        Return $companies;
+        DB::table('companies')
+            ->where('id', $id)
+            ->delete();
     }
 
 }

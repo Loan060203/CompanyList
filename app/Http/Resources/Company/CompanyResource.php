@@ -11,6 +11,7 @@ use App\Http\Resources\Vehicle\VehicleItemResource;
 use App\Models\Company\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use JsonSerializable;
 
 /**
  * Transform the resource into an array.
@@ -36,15 +37,6 @@ class CompanyResource extends JsonResource
             'branches' => $this->whenLoaded('branches', function () {
                 return CompanyBranchItemResource::collection($this->branches);
             }, null),
-//            'staffs' => $this->whenLoaded('active_staffs', function () {
-//                return StaffItemResource::collection($this->active_staffs);
-//            }, null),
-//            'vehicles' => $this->whenLoaded('active_vehicles', function () {
-//                return VehicleItemResource::collection($this->active_vehicles);
-//            }, null),
-//            'equipments' => $this->whenLoaded('active_equipments', function () {
-//                return EquipmentItemResource::collection($this->active_equipments);
-//            }, null),
             'post' => $this->post,
             'address' => $this->address,
             'tel1' => $this->tel1,

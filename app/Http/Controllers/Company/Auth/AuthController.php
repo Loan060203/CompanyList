@@ -29,11 +29,11 @@ class AuthController extends Controller
         $data = $request->validated();
 
         $user=$this->authRepository->store($data);
-        $token = $user->createToken('remember_token')->plainTextToken;
+//        $token = $user->createToken('remember_token')->plainTextToken;
 
         return response()->json([
             'user' => $user,
-            'token'=>$token,
+//            'token'=>$token,
         ]);
     }
     public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
