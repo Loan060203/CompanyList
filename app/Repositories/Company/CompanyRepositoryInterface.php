@@ -9,7 +9,9 @@ interface CompanyRepositoryInterface
 {
     public function getAll();
 
-    public function filters(Request $request);
+    public function filters();
+
+    public function findByFilters();
 
     public function showSort(Request $request);
 

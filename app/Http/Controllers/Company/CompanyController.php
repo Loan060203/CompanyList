@@ -46,14 +46,14 @@ class CompanyController extends Controller
     public function show($id): \Illuminate\Http\JsonResponse
     {
         $company = $this->companyRepository->getById($id);
-        //$companyResource = new CompanyResource($company);
+        $companyResource = new CompanyResource($company);
 
         $queries = DB::getQueryLog();
 
         return response()->json([
             'sql_query' => $queries,
-            //'company' => $companyResource,
-            'company'=>$company,
+            'company' => $companyResource,
+            //'company'=>$company,
         ]);
     }
     public function all(): \Illuminate\Http\JsonResponse
@@ -84,14 +84,14 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function showList(Request $request ): \Illuminate\Http\JsonResponse
+    public function showList(): \Illuminate\Http\JsonResponse
     {
-        $companies = $this->companyRepository->filters($request);
+        $companies = $this->companyRepository->findByFilters();
 
         $companyListResource = new CompanyCollection($companies);
 
         $queries = DB::getQueryLog();
-
+//
         return response()->json([
             'sql_query' => $queries,
             'company' => $companyListResource,
@@ -144,23 +144,32 @@ class CompanyController extends Controller
         ]);
     }
 
+    public function showByValue(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $companies = $this->companyRepository->filterByValue($request);
+        $companyListResource = CompanyListResource::collection($companies);
+
+        $queries = DB::getQueryLog();
+
+        return response()->json([
+            'sql_query' => $queries,
+            'company' => $companyListResource,
+        ]);
+    }
+
     /**
      * @throws AuthorizationException
      */
     public function destroy($id): \Illuminate\Http\JsonResponse
     {
-        if($this->authorize('delete', Company::class)){
+        if($this->authorize('delete', Company::class)) {
             $this->companyRepository->delete($id);
 
             $queries = DB::getQueryLog();
             return response()->json(['queries' => $queries]);}
-        else{
+        else {
             return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
 
         }
-
-
     }
-
-
 }

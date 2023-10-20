@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -40,6 +41,7 @@ Route::put('/company_branches/update/{id}', [CompanyBranchController::class, 'up
 
 Route::delete('/users/delete/{id}', [UserController::class, 'destroy']);
 
+
 Route::middleware('guest')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->name('auth.register');
     Route::post('login', [AuthController::class, 'login'])->name('login');
@@ -57,6 +59,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/companies/store', [CompanyController::class, 'store']);
     Route::put('/companies/update/{id}', [CompanyController::class, 'update'])->name('companies.update');
     Route::delete('/companies/delete/{id}', [CompanyController::class, 'destroy']);
+
+    Route::get('/companies/filter', [CompanyController::class, 'showByValue']);
 
 });
 

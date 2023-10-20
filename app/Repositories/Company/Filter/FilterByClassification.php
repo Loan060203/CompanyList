@@ -4,9 +4,9 @@ namespace App\Repositories\Company\Filter;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class FilterByClassification
+class FilterByClassification implements \Spatie\QueryBuilder\Filters\Filter
 {
-    public function __invoke(Builder $query, int $value): Builder
+    public function __invoke(Builder $query, $value, string $property): Builder
     {
         return $query->where('classification','=',$value);
     }

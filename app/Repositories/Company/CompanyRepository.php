@@ -7,16 +7,22 @@ use App\Http\Request\CreateCompanyRequest;
 use App\Http\Request\UpdateCompanyRequest;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyBranch;
+use App\Repositories\Company\Filter\FilterAggregationBy;
 use App\Repositories\Company\Filter\FilterByClassification;
 use App\Repositories\Company\Filter\FilterByUseflg;
+use App\Repositories\Company\Filter\FilterSalesSummary1Section;
+use App\Repositories\Company\Filter\FilterSalesSummary1YearMonth;
 use App\Repositories\Company\Sort\CompanySortByCode;
+use App\Repositories\Company\Sorter\CompanyBranchUseFlgSort;
 use App\Support\Trait\HasPagination;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 
@@ -24,23 +30,17 @@ class CompanyRepository implements CompanyRepositoryInterface
 {
     use HasPagination;
 
-    protected array $filterByParams = [];
-    protected array $sortByCode = [];
-    public function __construct()
+    protected function allowedCustomFilters(): array
     {
-        $this->filterByParams = [
-            'use_flg' => new FilterByUseflg,
-            'classification' => new FilterByClassification,
-        ];
-
-        $this->sortByCode=[
-            'code'=> new CompanySortByCode,
+        return [
+            AllowedFilter::custom('use_flg' , new FilterByUseflg),
+            AllowedFilter::custom('classification', new FilterByClassification),
         ];
     }
 
     public function getAll(): \Illuminate\Support\Collection
     {
-        return DB::table('companies')->get();
+        return QueryBuilder::for(Company::class)->get();
 
     }
     public function getAllDropdown(Request $request): \Illuminate\Support\Collection
@@ -49,104 +49,92 @@ class CompanyRepository implements CompanyRepositoryInterface
 
         if(isset($use_flg)){
 
-            return DB::table('companies')
+            return QueryBuilder::for(Company::class)
                 ->where('use_flg', $use_flg)
                 ->get();
 
         }
         return Company::all();
-
     }
-    public function filters(Request $request):LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection
+
+    protected array $defaultSelect = [
+        'companies.id',
+        'companies.classification',
+        'companies.code',
+        'companies.name',
+        'companies.yomigana',
+        'companies.post',
+        'companies.address',
+        'companies.tel1',
+        'companies.tel2',
+        'companies.fax',
+        'companies.contact_name',
+        'companies.url',
+        'companies.dsp_ord_num',
+        'companies.remark',
+        'companies.idv_mgmt',
+        'companies.use_flg',
+        'companies.created_at',
+        'companies.created_by',
+        'companies.updated_at',
+        'companies.updated_by'
+    ];
+
+    protected string $defaultSort = 'dsp_ord_num';
+     protected array $allowedFilters =[
+         'code',
+         'name',
+         'use_flg',
+         'classification'
+         ];
+
+    protected array $allowedSorts = [
+        'updated_at',
+        'name',
+        'code',
+        'use_flg',
+        'address',
+        'tel1',
+        'created_at',
+        'dsp_ord_num',
+        'yomigana'
+    ];
+
+    protected function allowedCustomSorts(): array
     {
-        $companies = Company::query();
-
-        if($params = $request->input('filter'))
-        {
-            $companies = $this->getFilters($companies, $this->filterByParams);
-        }
-
-        if($sort = $request->query('sort'))
-        {
-            $companies = $this->getSort($companies, $this->sortByCode);
-        }
-
-        return $companies->paginate($this->getPerPage());
+        return [
+            AllowedSort::custom('code', new CompanySortByCode, ''),
+        ];
     }
 
-    public function getFilters(Builder $query, array $filterByParams): Builder
+    public function filters(): QueryBuilder
     {
-        $params = request()->input('filter');
-        foreach ($params as $param => $value) {
-            $callable = $filterByParams[$param] ?? null;
-            if (isset($callable)) {
-                $callable($query, $value);
-            }
-        }
-        return $query;
+        return QueryBuilder::for(Company::class)
+            ->addSelect($this->defaultSelect)
+            ->allowedFilters([
+                ...$this->allowedFilters,
+                ...$this->allowedCustomFilters(),
+            ])
+            ->allowedSorts([
+            ...$this->allowedSorts,
+            ...$this->allowedCustomSorts(),
+        ])
+            ->defaultSort($this->defaultSort);
+
     }
 
-//    public function filterByValue(Request $request)
-//    {
-//        $value = $request->input('value');
-//
-//        $companies = DB::table('companies')
-//            ->where('column_name', $value)
-//            ->get();
-//
-//        return $companies;
-//    }
-
-    public function getSort(Builder $query,array $sortByCode): Builder
+    public function findByFilters(): LengthAwarePaginator
     {
-        if ($sort = request()->query('sort')) {
-            $descending = str_starts_with($sort, '-');
-            $sortColumn = $descending ? substr($sort, 1) : $sort;
-            $callable = $sortByCode[$sortColumn] ?? null;
-            if (isset($callable)) {
-                $callable($query, $descending);
-            }
-        }
-        return $query;
+        return $this->filters()->paginate($this->getPerPage());
     }
-
-//    public function getFilters($companies, $params)
-//    {
-//
-//        $filterByParams = [
-//            'use_flg'=> new FilterByUseflg(),
-//            'classification'=>new FilterByClassification(),
-//        ];
-//
-//        foreach ($params as $param => $value)
-//        {
-//            $callable = $filterByParams[$param] ?? null;
-//            if (isset($callable)) {
-//                $callable($companies, $value);
-//            }
-//        }
-//        return $companies;
-//    }
-
-//    public function getSort($companies, $sort)
-//    {
-//        if (str_starts_with($sort, '-')) {
-//            $sortColumn = substr($sort, 1);
-//            $companies->orderByDesc($sortColumn);
-//        } else {
-//            $companies->orderBy($sort);
-//        }
-//        return $companies;
-//    }
 
     public function showSort(Request $request): array|\Illuminate\Database\Eloquent\Collection
     {
-        $sort = $request->query('sort');
-
-        if (str_starts_with($sort, '-')) {
-            $sortColumn = substr($sort, 1);
-            return Company::query()->orderByDesc($sortColumn)->get();
-        }return Company::query()->orderBy($sort)->get();
+        return QueryBuilder::for(Company::class)
+            ->allowedSorts([
+                AllowedSort::custom('code', new CompanySortByCode(), 'code'),
+            ])
+            ->get();
     }
 
     public function getAllWithBranches(): LengthAwarePaginator
@@ -156,8 +144,7 @@ class CompanyRepository implements CompanyRepositoryInterface
 
     public function getById($id)
     {
-        //return Company::findOrFail($id);
-        return DB::table('companies')
+        return QueryBuilder::for(Company::class)
             ->where('id', $id)
             ->first();
     }
@@ -187,5 +174,4 @@ class CompanyRepository implements CompanyRepositoryInterface
             ->where('id', $id)
             ->delete();
     }
-
 }
