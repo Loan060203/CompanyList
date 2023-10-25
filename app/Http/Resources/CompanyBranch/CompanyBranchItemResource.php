@@ -11,6 +11,7 @@ use App\Models\Company\CompanyBranch;
 use Illuminate\Http\Request;
 
 
+
 /**
  * Transform the resource into an array.
  *

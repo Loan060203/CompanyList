@@ -15,6 +15,7 @@ use App\Repositories\Company\CompanyRepositoryInterface;
 use App\Repositories\CompanyBranch\CompanyBranchRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\Access\AuthorizationException;
 
 
 class CompanyBranchController extends Controller
@@ -27,7 +28,7 @@ class CompanyBranchController extends Controller
     }
     public function index(): \Illuminate\Http\JsonResponse
     {
-        $branches = $this->companyBranchRepository->getAllBranches();
+        $branches = $this->companyBranchRepository->getAllWithBranches();
         $companyBranchCollection= new CompanyBranchCollection($branches);
 
         $queries = DB::getQueryLog();
@@ -49,6 +50,19 @@ class CompanyBranchController extends Controller
         ]);
     }
 
+    public function showList(): \Illuminate\Http\JsonResponse
+    {
+        $branches = $this->companyBranchRepository->findByFilters();
+
+//        $CompanyBranchItemResource = new CompanyBranchItemResource($branches);
+
+        $queries = DB::getQueryLog();
+        return response()->json([
+            'sql_query' => $queries,
+            'company' => $branches,
+        ]);
+    }
+
     public  function  all(): \Illuminate\Http\JsonResponse
     {
         $branches = $this->companyBranchRepository->getAll();
@@ -61,20 +75,52 @@ class CompanyBranchController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function store(CreateCompanyBranchRequest $request): \Illuminate\Http\JsonResponse
     {
+        if($this->authorize('create', CompanyBranch::class)){
         $branches = $this->companyBranchRepository->create($request);
 
         $queries = DB::getQueryLog();
         return response()->json(['queries' => $queries,'data'=>$branches]);
+        }
+        else{
+            return response()->json(['error']);
+        }
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function update(UpdateCompanyBranchRequest $request, int $id): \Illuminate\Http\JsonResponse
     {
-        $branches = $this->companyBranchRepository->update($request, $id);
+        if($this->authorize('update', CompanyBranch::class)){
+            $branches = $this->companyBranchRepository->update($request, $id);
 
-        $queries = DB::getQueryLog();
-        return response()->json(['queries' => $queries,'data'=>$branches]);
+            $queries = DB::getQueryLog();
+            return response()->json(['queries' => $queries,'data'=>$branches]);
+        }
+        else{
+            return response()->json(['error']);
+        }
+
     }
 
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy($id): \Illuminate\Http\JsonResponse
+    {
+        if($this->authorize('delete', CompanyBranch::class)) {
+            $this->companyBranchRepository->delete($id);
+
+            $queries = DB::getQueryLog();
+            return response()->json(['queries' => $queries]);}
+        else {
+            return response()->json(['error'=>'bạn không có quyền thực hiện hành động này!']);
+
+        }
+    }
 }

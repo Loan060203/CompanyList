@@ -3,8 +3,10 @@
 namespace App\Http\Request;
 
 use App\Enums\CompanyBranchTypeEnum;
+use App\Models\Company\CompanyBranch;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 
 class CreateCompanyBranchRequest extends FormRequest
@@ -32,5 +34,13 @@ class CreateCompanyBranchRequest extends FormRequest
 
             //
         ];
+    }
+
+    /**
+     * @throws UnknownProperties
+     */
+    public function getDataTransferObject(): CompanyBranchDTO
+    {
+        return new CompanyBranchDTO($this->validated());
     }
 }

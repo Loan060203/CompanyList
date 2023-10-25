@@ -3,17 +3,14 @@ namespace App\Repositories\Company;
 
 use App\Enums\CompanyTypeEnum;
 
+use App\Http\Request\CompanyDTO;
 use App\Http\Request\CreateCompanyRequest;
 use App\Http\Request\UpdateCompanyRequest;
 use App\Models\Company\Company;
 use App\Models\Company\CompanyBranch;
-use App\Repositories\Company\Filter\FilterAggregationBy;
 use App\Repositories\Company\Filter\FilterByClassification;
 use App\Repositories\Company\Filter\FilterByUseflg;
-use App\Repositories\Company\Filter\FilterSalesSummary1Section;
-use App\Repositories\Company\Filter\FilterSalesSummary1YearMonth;
 use App\Repositories\Company\Sort\CompanySortByCode;
-use App\Repositories\Company\Sorter\CompanyBranchUseFlgSort;
 use App\Support\Trait\HasPagination;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -21,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -154,17 +152,23 @@ class CompanyRepository implements CompanyRepositoryInterface
         return Company::findOrFail($use_flg);
     }
 
+    /**
+     * @throws UnknownProperties
+     */
     public function create(CreateCompanyRequest $request): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Builder
     {
-        $data = $request->validated();
-        return Company::query()->create($data);
+        $companyDTO = $request-> getDataTransferObject();
+        return Company::query()->create($companyDTO->toArray());
     }
 
+    /**
+     * @throws UnknownProperties
+     */
     public function update(UpdateCompanyRequest $request, int $id): array|null|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
     {
-        $data = $request->validated();
+        $companyDTO = $request->getDataTransferObject();
         $company = Company::query()->findOrFail($id);
-        $company->update($data);
+        $company->update($companyDTO->toArray());
         return $company;
     }
 

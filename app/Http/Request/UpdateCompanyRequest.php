@@ -3,9 +3,9 @@
 namespace App\Http\Request;
 
 use App\Enums\CompanyTypeEnum;
-use App\Rules\Company\CompanyClassificationUnique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -49,8 +49,18 @@ class UpdateCompanyRequest extends FormRequest
             'remark' => 'string|nullable',
             'dsp_ord_num' => 'numeric',
             'idv_mgmt' => 'boolean',
-            'use_flg' => 'boolean'
+            'use_flg' => 'boolean',
+            'created_by'=>'max:50',
+            'updated_by'=>'max:50'
             //
         ];
+    }
+
+    /**
+     * @throws UnknownProperties
+     */
+    public function getDataTransferObject(): CompanyDTO
+    {
+        return new CompanyDTO($this->validated());
     }
 }

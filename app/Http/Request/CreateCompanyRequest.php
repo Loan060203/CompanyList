@@ -4,10 +4,10 @@
 namespace App\Http\Request;
 
 use App\Enums\CompanyTypeEnum;
-use App\Rules\Company\CompanyClassificationUnique;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class CreateCompanyRequest extends FormRequest
 {
@@ -26,6 +26,7 @@ class CreateCompanyRequest extends FormRequest
      *
      * @return array
      */
+
     public function rules()
     {
         return [
@@ -48,5 +49,13 @@ class CreateCompanyRequest extends FormRequest
             'updated_by'=>'max:50'
             //
         ];
+    }
+
+    /**
+     * @throws UnknownProperties
+     */
+    public function getDataTransferObject(): CompanyDTO
+    {
+        return new CompanyDTO($this->validated());
     }
 }

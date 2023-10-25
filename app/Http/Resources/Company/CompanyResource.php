@@ -48,14 +48,6 @@ class CompanyResource extends JsonResource
             'remark' => $this->remark,
             'idv_mgmt' => $this->idv_mgmt,
             'use_flg' => $this->use_flg,
-//            'create_info' => [
-//                'date' => $this->created_at->format(CommonEnum::DATE_TIME_FORMAT),
-//                'name' => $this->createdUserName(),
-//            ],
-//            'update_info' => [
-//                'date' => $this->updated_at->format(CommonEnum::DATE_TIME_FORMAT),
-//                'name' => $this->updatedUserName(),
-//            ]
         ];
     }
 }

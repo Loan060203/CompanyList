@@ -61,7 +61,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/companies/delete/{id}', [CompanyController::class, 'destroy']);
 
     Route::get('/companies/filter', [CompanyController::class, 'showByValue']);
+    Route::get('/company_branches/show_list', [CompanyBranchController::class, 'showList']);
 
 });
+
 
 

@@ -16,6 +16,7 @@ use App\Repositories\Company\CompanyRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 
 /**
@@ -103,13 +104,15 @@ class CompanyController extends Controller
      */
     public function store(CreateCompanyRequest $request): \Illuminate\Http\JsonResponse
     {
-        if($this->authorize('create', Company::class)){
-        $companies = $this->companyRepository->create($request);
+        if($this->authorize('create', Company::class))
+        {
+            $companies = $this->companyRepository->create($request);
 
-        $queries = DB::getQueryLog();
-        return response()->json([
-            'queries' => $queries,
-            'data'=>$companies]);}
+            $queries = DB::getQueryLog();
+            return response()->json([
+                'queries' => $queries,
+                'data'=>$companies]);
+        }
         else{
             return response()->json(['error']);
         }
@@ -144,18 +147,18 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function showByValue(Request $request): \Illuminate\Http\JsonResponse
-    {
-        $companies = $this->companyRepository->filterByValue($request);
-        $companyListResource = CompanyListResource::collection($companies);
-
-        $queries = DB::getQueryLog();
-
-        return response()->json([
-            'sql_query' => $queries,
-            'company' => $companyListResource,
-        ]);
-    }
+//    public function showByValue(Request $request): \Illuminate\Http\JsonResponse
+//    {
+//        $companies = $this->companyRepository->filterByValue($request);
+//        $companyListResource = CompanyListResource::collection($companies);
+//
+//        $queries = DB::getQueryLog();
+//
+//        return response()->json([
+//            'sql_query' => $queries,
+//            'company' => $companyListResource,
+//        ]);
+//    }
 
     /**
      * @throws AuthorizationException

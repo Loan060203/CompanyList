@@ -6,6 +6,7 @@ use App\Enums\CompanyBranchTypeEnum;
 use App\Models\Company\CompanyBranch;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class UpdateCompanyBranchRequest extends FormRequest
 {
@@ -44,5 +45,13 @@ class UpdateCompanyBranchRequest extends FormRequest
             'updated_by'=>'max:50'
             //
         ];
+    }
+
+    /**
+     * @throws UnknownProperties
+     */
+    public function getDataTransferObject(): CompanyBranchDTO
+    {
+        return new CompanyBranchDTO($this->validated());
     }
 }
