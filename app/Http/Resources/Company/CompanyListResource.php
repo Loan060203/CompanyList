@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Company;
 
-use App\Http\Resources\CompanyBranch\CompanyBranchItemResource;
+use App\Http\Request\Company\CompanyDTO;
 use App\Models\Company\Company;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class CompanyListResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $companyDTO = new CompanyDTO( [
             'id' => $this->id,
             'code' => $this->code,
             'name' => $this->name,
@@ -33,6 +33,7 @@ class CompanyListResource extends JsonResource
             'address' => $this->address,
             'use_flg' => $this->use_flg,
             'tel1' => $this->tel1,
-        ];
+        ]);
+        return $companyDTO->toArray();
     }
 }

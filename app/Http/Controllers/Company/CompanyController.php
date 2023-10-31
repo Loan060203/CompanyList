@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Company;
 
 
 use App\Http\Controllers\Controller;
-use App\Http\Request\CreateCompanyRequest;
-use App\Http\Request\UpdateCompanyRequest;
+use App\Http\Request\Company\CreateCompanyRequest;
+use App\Http\Request\Company\UpdateCompanyRequest;
 use App\Http\Resources\Company\CompanyAllInDropdown;
 use App\Http\Resources\Company\CompanyCollection;
-use App\Http\Resources\Company\CompanyGetAllResource;
 use App\Http\Resources\Company\CompanyListResource;
 use App\Http\Resources\Company\CompanyResource;
 use App\Models\Company\Company;
@@ -16,7 +15,6 @@ use App\Repositories\Company\CompanyRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 
 /**
@@ -54,7 +52,6 @@ class CompanyController extends Controller
         return response()->json([
             'sql_query' => $queries,
             'company' => $companyResource,
-            //'company'=>$company,
         ]);
     }
     public function all(): \Illuminate\Http\JsonResponse
@@ -67,6 +64,7 @@ class CompanyController extends Controller
         return response()->json([
             'sql_query' => $queries,
             //'company' => $companyGetAllResource,
+            'company'=>$companies,
             'company'=>$companies,
         ]);
     }

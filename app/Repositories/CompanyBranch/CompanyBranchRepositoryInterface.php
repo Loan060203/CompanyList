@@ -3,8 +3,8 @@ namespace App\Repositories\CompanyBranch;
 
 
 
-use App\Http\Request\CreateCompanyBranchRequest;
-use App\Http\Request\UpdateCompanyBranchRequest;
+use App\Http\Request\CompanyBranch\CreateCompanyBranchRequest;
+use App\Http\Request\CompanyBranch\UpdateCompanyBranchRequest;
 
 Interface CompanyBranchRepositoryInterface
 {

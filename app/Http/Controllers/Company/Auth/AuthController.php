@@ -5,14 +5,11 @@ namespace App\Http\Controllers\Company\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Request\LoginRequest;
 use App\Http\Request\RegisterRequest;
-use App\Models\Company\Company;
+use App\Models\Staff;
 use App\Models\User;
 use App\Repositories\AuthRepositoryInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 
 class AuthController extends Controller
@@ -40,8 +37,20 @@ class AuthController extends Controller
     {
         $credentials = $request->validated();
 
+        if (!User::where('name', '=', $credentials['name'])->exists()) {
+            return response()->json(['error' => trans('errors.name_invalid')], 401);
+        }
+
         if (!Auth::attempt($credentials)) {
-            return $this->httpUnauthorized(trans('errors.unauthenticated'));
+            return response()->json(['error' => trans('No.100005: パスワードが正しくありません')], 401);
+        }
+
+        $user=User::where('name', '=', $credentials['name'])->first();
+        if ($user) {
+            $staff = Staff::find($user->staff_id);
+            if ($staff && $staff->use_flg == 0) {
+                return response()->json(['error_message' => 'No.100006: お使いのアカウントは利用が制限されております。システム管理者へお問合せください。'], 401);
+            }
         }
 
         Auth::user()->tokens()->delete();
@@ -59,11 +68,6 @@ class AuthController extends Controller
         Auth::user()->tokens()->delete();
 
         return response()->json(['Logout successfully']);
-    }
-
-    public function httpUnauthorized(): \Illuminate\Http\JsonResponse
-    {
-        return response()->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
 
     protected function responseUserWithToken($token, $user): array

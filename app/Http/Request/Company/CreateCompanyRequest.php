@@ -1,29 +1,23 @@
 <?php
 
-namespace App\Http\Request;
+
+namespace App\Http\Request\Company;
 
 use App\Enums\CompanyTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class UpdateCompanyRequest extends FormRequest
+class CreateCompanyRequest extends FormRequest
 {
-    public function authorize()
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
     {
         return true;
-    }
-
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation(): void
-    {
-        $this->merge([
-        'id' => $this->route('companies') ? $this->route('companies')['id'] : null,
-        ]);
     }
 
     /**
@@ -31,12 +25,12 @@ class UpdateCompanyRequest extends FormRequest
      *
      * @return array
      */
+
     public function rules()
     {
-        $companyId = $this->route('companies') ? $this->route('companies')['id'] : null;
         return [
             'classification' => [Rule::in(CompanyTypeEnum::getValues())],
-            'code' => ['max:50', 'string', 'required', Rule::unique('companies')->ignore($companyId, 'id')],
+            'code' => ['max:50', 'string', 'required', Rule::unique('companies')],
             'name' => 'max:100|string',
             'yomigana' => 'string|nullable',
             'post' => 'max:8',
@@ -46,8 +40,8 @@ class UpdateCompanyRequest extends FormRequest
             'fax' => 'max:13',
             'contact_name' => 'max:50',
             'url' => 'max:100',
-            'remark' => 'string|nullable',
             'dsp_ord_num' => 'numeric',
+            'remark' => 'string|nullable',
             'idv_mgmt' => 'boolean',
             'use_flg' => 'boolean',
             'created_by'=>'max:50',

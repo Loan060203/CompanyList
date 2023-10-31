@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             //CompanyBranchSeeder::class,
             //DistrictSeeder::class,
             UserSeeder::class,
+            //StaffSeeder::class,
         ]);
     }
 }

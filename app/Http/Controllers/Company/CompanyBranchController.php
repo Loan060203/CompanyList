@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
-use App\Http\Request\CreateCompanyBranchRequest;
-use App\Http\Request\UpdateCompanyBranchRequest;
-use App\Http\Resources\Company\CompanyResource;
+use App\Http\Request\CompanyBranch\CreateCompanyBranchRequest;
+use App\Http\Request\CompanyBranch\UpdateCompanyBranchRequest;
 use App\Http\Resources\CompanyBranch\CompanyBranchCollection;
-use App\Http\Resources\CompanyBranch\CompanyBranchGetAllResource;
 use App\Http\Resources\CompanyBranch\CompanyBranchItemResource;
 use App\Http\Resources\CompanyBranch\CompanyBranchResource;
 use App\Models\Company\CompanyBranch;
-use App\Repositories\Company\CompanyRepositoryInterface;
 use App\Repositories\CompanyBranch\CompanyBranchRepositoryInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\DB;
 
 
 class CompanyBranchController extends Controller

@@ -23,6 +23,7 @@ class AuthRepository  implements AuthRepositoryInterface
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
         $user->role =$data['role'];
+        $user->staff_id= $data['staff_id'];
         $user->save();
 
         return $user;

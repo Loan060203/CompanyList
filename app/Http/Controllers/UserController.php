@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Request\CreateCompanyRequest;
-use App\Models\Company\Company;
 use App\Models\User;
+use App\Policies\UserPolicy;
 use App\Repositories\UserRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Policies\UserPolicy;
 
 class UserController extends Controller
 {

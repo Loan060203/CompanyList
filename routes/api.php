@@ -4,6 +4,8 @@ use App\Http\Controllers\Company\Auth\AuthController;
 use App\Http\Controllers\Company\CompanyBranchController;
 use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\Setting\UserSettingController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,5 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
-
+    Route::post('/staffs/store',[StaffController::class,'store']);
+    Route::post('/user_setting/store',[UserSettingController::class,'store']);
 

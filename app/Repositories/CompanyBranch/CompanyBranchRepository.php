@@ -2,15 +2,13 @@
 
 namespace App\Repositories\CompanyBranch;
 
-use App\Http\Request\CreateCompanyBranchRequest;
-use App\Http\Request\UpdateCompanyBranchRequest;
+use App\Http\Request\CompanyBranch\CreateCompanyBranchRequest;
+use App\Http\Request\CompanyBranch\UpdateCompanyBranchRequest;
 use App\Models\Company\CompanyBranch;
-use App\Repositories\Company\Sort\CompanySortByCode;
 use App\Repositories\CompanyBranch\Filter\FilterByUseflg;
 use App\Repositories\CompanyBranch\Sort\CompanyBranchSortByCode;
 use App\Support\Trait\HasPagination;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\AllowedSort;

@@ -2,16 +2,14 @@
 
 namespace App\Http\Resources\Company;
 
-use App\Enums\CommonEnum;
+use App\Http\Request\Company\CompanyDTO;
 use App\Http\Resources\Arrayable;
 use App\Http\Resources\CompanyBranch\CompanyBranchItemResource;
-use App\Http\Resources\Equipment\EquipmentItemResource;
-use App\Http\Resources\Staff\StaffItemResource;
-use App\Http\Resources\Vehicle\VehicleItemResource;
 use App\Models\Company\Company;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 /**
  * Transform the resource into an array.
@@ -25,10 +23,11 @@ class CompanyResource extends JsonResource
      *
      * @param Request $request
      * @return array|Arrayable|JsonSerializable
+     * @throws UnknownProperties
      */
     public function toArray($request)
     {
-        return [
+        $companyDTO = new CompanyDTO( [
             'id' => $this->id,
             'classification' => $this->classification,
             'code' => $this->code,
@@ -48,6 +47,7 @@ class CompanyResource extends JsonResource
             'remark' => $this->remark,
             'idv_mgmt' => $this->idv_mgmt,
             'use_flg' => $this->use_flg,
-        ];
+        ]);
+        return $companyDTO->toArray();
     }
 }

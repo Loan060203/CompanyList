@@ -10,8 +10,10 @@ use App\Repositories\CompanyBranch\CompanyBranchRepository;
 use App\Repositories\CompanyBranch\CompanyBranchRepositoryInterface;
 use App\Repositories\District\DistrictRepository;
 use App\Repositories\District\DistrictRepositoryInterface;
-use App\Repositories\UserRepositoryInterface;
-use App\Repositories\UserRepository;
+use App\Repositories\Staff\StaffRepository;
+use App\Repositories\Staff\StaffRepositoryInterface;
+use App\Repositories\UserSetting\UserSettingRepository;
+use App\Repositories\UserSetting\UserSettingRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,7 +28,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CompanyBranchRepositoryInterface::class, CompanyBranchRepository::class);
         $this->app->bind(DistrictRepositoryInterface::class, DistrictRepository::class);
         $this->app->bind(AuthRepositoryInterface::class,AuthRepository::class);
-
+        $this->app->bind(StaffRepositoryInterface::class,StaffRepository::class);
+        $this->app->bind(UserSettingRepositoryInterface::class, UserSettingRepository::class);
     }
 
     /**

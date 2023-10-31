@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,12 +18,15 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $staffIds = Staff::query()->get('id')->pluck('id')->toArray();
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => $this->faker->numerify('########'),
             'remember_token' => Str::random(10),
+            'role'=>$this->faker->numberBetween(0, 4),
+            'staff_id' => $this->faker->unique()->randomElement($staffIds)
         ];
     }
 

@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Request;
+namespace App\Http\Request\CompanyBranch;
 
 use Spatie\DataTransferObject\DataTransferObject;
+
 class CompanyBranchDTO extends DataTransferObject
 {
     public string $classification;

@@ -3,7 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\DayAggregationTimeTypeEnum;
+use App\Enums\PaginationTypeEnum;
+use App\Enums\RegistrationFactoryTypeEnum;
+use App\Enums\SortOrderTypeEnum;
+use App\Enums\YearAggregationTimeTypeEnum;
+use App\Models\Setting\UserSetting;
+use App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -24,6 +32,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
+ * @property mixed $staff_id
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -53,6 +62,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'staff_id'
     ];
 
     /**
@@ -77,6 +87,23 @@ class User extends Authenticatable
 
     public  function isAdmin(): bool
     {
-        return $this->role == '10';
+        return $this->role == '1';
+    }
+
+    public function staff(): BelongsTo
+    {
+        return $this->belongsTo(Staff::class);
+    }
+
+    protected static function booted()
+    {
+        static::created(function (User $user) {
+            UserSetting::create(['staff_id' => $user->staff_id,
+                'one_day_aggregation_time' => DayAggregationTimeTypeEnum::FULL_DAY,
+                'one_year_aggregation_time' => YearAggregationTimeTypeEnum::FULL_YEAR,
+                'std_sort_order' => SortOrderTypeEnum::CREATED_ORDER,
+                'std_registration_factory' => RegistrationFactoryTypeEnum::MINAMISE_FACTORY,
+                'pagination_num' => PaginationTypeEnum::TEN_ITEMS]);
+        });
     }
 }

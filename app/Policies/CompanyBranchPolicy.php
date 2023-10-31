@@ -30,7 +30,7 @@ class CompanyBranchPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role==10;
+        return $user->role==1;
     }
 
     /**
@@ -38,7 +38,7 @@ class CompanyBranchPolicy
      */
     public function update(User $user): bool
     {
-        return $user->role==11;
+        return $user->role==1;
     }
 
     /**
@@ -46,7 +46,7 @@ class CompanyBranchPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->role==10;
+        return $user->role==3;
     }
 
     /**

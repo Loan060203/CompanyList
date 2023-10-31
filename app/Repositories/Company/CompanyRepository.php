@@ -1,22 +1,15 @@
 <?php
 namespace App\Repositories\Company;
 
-use App\Enums\CompanyTypeEnum;
-
-use App\Http\Request\CompanyDTO;
-use App\Http\Request\CreateCompanyRequest;
-use App\Http\Request\UpdateCompanyRequest;
+use App\Http\Request\Company\CreateCompanyRequest;
+use App\Http\Request\Company\UpdateCompanyRequest;
 use App\Models\Company\Company;
-use App\Models\Company\CompanyBranch;
 use App\Repositories\Company\Filter\FilterByClassification;
 use App\Repositories\Company\Filter\FilterByUseflg;
 use App\Repositories\Company\Sort\CompanySortByCode;
 use App\Support\Trait\HasPagination;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Spatie\QueryBuilder\AllowedFilter;

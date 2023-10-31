@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Request;
+namespace App\Http\Request\CompanyBranch;
 
 use App\Enums\CompanyBranchTypeEnum;
-use App\Models\Company\CompanyBranch;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;

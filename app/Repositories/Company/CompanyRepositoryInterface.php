@@ -1,8 +1,8 @@
 <?php
 namespace App\Repositories\Company;
 
-use App\Http\Request\CreateCompanyRequest;
-use App\Http\Request\UpdateCompanyRequest;
+use App\Http\Request\Company\CreateCompanyRequest;
+use App\Http\Request\Company\UpdateCompanyRequest;
 use Illuminate\Http\Request;
 
 interface CompanyRepositoryInterface
